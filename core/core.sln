@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35931.197 d17.13
+VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "core", "core\core.csproj", "{687293CD-B175-410D-85AD-AB29292D97B4}"
 	ProjectSection(ProjectDependencies) = postProject
 		{73ECF448-314C-4D51-81E6-0A0A58C6A4B2} = {73ECF448-314C-4D51-81E6-0A0A58C6A4B2}
+		{AAB5FC8A-43E4-48C2-BD78-D7EE92036F11} = {AAB5FC8A-43E4-48C2-BD78-D7EE92036F11}
+		{DAE9E0A1-20F5-4347-AD65-C7BBDDAABF72} = {DAE9E0A1-20F5-4347-AD65-C7BBDDAABF72}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{AAB5FC8A-43E4-48C2-BD78-D7EE92036F11}"
