@@ -4,55 +4,38 @@ using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
 
-namespace Application.Services
+namespace Application.Services;
+
+public class InventoryService(IInventoryDomainService inventoryDomainService, IMapper mapper)
+    : IInventoryService
 {
-    public class InventoryService : IInventoryService
+    public async Task<InventoryItemDTO> GetItemInfoByIdAsync(Guid itemId)
     {
-        private readonly IInventoryRepository _inventoryRepository;
-        private readonly IMapper _mapper;
+        var item = await inventoryDomainService.GetItemInfoByIdAsync(itemId);
+        return item == null ? null : mapper.Map<InventoryItemDTO>(item);
+    }
         
-        public InventoryService(IInventoryRepository inventoryRepository, IMapper mapper)
-        {
-            _inventoryRepository = inventoryRepository;
-            _mapper = mapper;
-        }
+    public async Task<IEnumerable<InventoryItemDTO>> GetItemsByTypeAsync(int? itemTypeId)
+    {
+        var items = await inventoryDomainService.GetItemsByTypeAsync(itemTypeId);
+        return mapper.Map<IEnumerable<InventoryItemDTO>>(items);
+    }
         
-        public async Task<InventoryItemDTO> GetItemInfoByIdAsync(Guid itemId)
-        {
-            var item = await _inventoryRepository.GetItemInfoByIdAsync(itemId);
-            if (item == null)
-            {
-                return null;
-            }
-            return _mapper.Map<InventoryItemDTO>(item);
-        }
+    public async Task<InventoryItemDTO> GetItemByIdAsync(Guid itemId)
+    {
+        var item = await inventoryDomainService.GetItemByIdAsync(itemId);
+        return item == null ? null : mapper.Map<InventoryItemDTO>(item);
+    }
         
-        public async Task<IEnumerable<InventoryItemDTO>> GetItemsByTypeAsync(int? itemTypeId)
-        {
-            var items = await _inventoryRepository.GetItemsByTypeAsync(itemTypeId);
-            return _mapper.Map<IEnumerable<InventoryItemDTO>>(items);
-        }
+    public async Task<InventoryItemDTO> AddNewItemAsync(CreateInventoryItemDTO createInventoryItemDTO)
+    {
+        var item = mapper.Map<InventoryObject>(createInventoryItemDTO);
+        item = await inventoryDomainService.AddNewItemAsync(item);
+        return mapper.Map<InventoryItemDTO>(item);
+    }
         
-        public async Task<InventoryItemDTO> GetItemByIdAsync(Guid itemId)
-        {
-            var item = await _inventoryRepository.GetByIdAsync(itemId);
-            if (item == null)
-            {
-                return null;
-            }
-            return _mapper.Map<InventoryItemDTO>(item);
-        }
-        
-        public async Task<InventoryItemDTO> AddNewItemAsync(CreateInventoryItemDTO createInventoryItemDTO)
-        {
-            var item = _mapper.Map<InventoryObject>(createInventoryItemDTO);
-            item = await _inventoryRepository.AddAsync(item);
-            return _mapper.Map<InventoryItemDTO>(item);
-        }
-        
-        public async Task DeleteItemAsync(Guid itemId)
-        {
-            await _inventoryRepository.DeleteAsync(itemId);
-        }
+    public async Task DeleteItemAsync(Guid itemId)
+    {
+        await inventoryDomainService.DeleteItemAsync(itemId);
     }
 }

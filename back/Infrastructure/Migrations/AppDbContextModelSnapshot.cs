@@ -167,51 +167,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("LogEntries");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<double>("CargoWeight")
-                        .HasColumnType("double precision");
-
-                    b.Property<string>("OrderNumber")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime>("PickupDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("ReceiverAddress")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("ReceiverCity")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("SenderAddress")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("SenderCity")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Orders");
-                });
-
             modelBuilder.Entity("Domain.Entities.Rental", b =>
                 {
                     b.Property<int>("RentalId")
@@ -254,32 +209,41 @@ namespace Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("RequestId"));
 
-                    b.Property<int>("CreatedById")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Description")
+                    b.Property<int>("CreatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("EstimatedEndDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("InventoryObjectItemId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("RepairmanId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ReportNote")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("uuid");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("RequestId");
 
-                    b.HasIndex("CreatedById");
+                    b.HasIndex("CreatorId");
 
-                    b.HasIndex("ItemId");
+                    b.HasIndex("InventoryObjectItemId");
 
                     b.ToTable("RepairRequests");
                 });
@@ -382,21 +346,15 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.RepairRequest", b =>
                 {
-                    b.HasOne("Domain.Entities.User", "CreatedBy")
+                    b.HasOne("Domain.Entities.User", null)
                         .WithMany("RepairRequests")
-                        .HasForeignKey("CreatedById")
+                        .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.InventoryObject", "InventoryObject")
+                    b.HasOne("Domain.Entities.InventoryObject", null)
                         .WithMany("RepairRequests")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("InventoryObject");
+                        .HasForeignKey("InventoryObjectItemId");
                 });
 
             modelBuilder.Entity("Domain.Entities.InventoryObject", b =>

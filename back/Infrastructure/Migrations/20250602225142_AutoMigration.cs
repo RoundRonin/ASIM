@@ -30,25 +30,6 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    SenderCity = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    SenderAddress = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    ReceiverCity = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    ReceiverAddress = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    CargoWeight = table.Column<double>(type: "double precision", nullable: false),
-                    PickupDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    OrderNumber = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -175,25 +156,27 @@ namespace Infrastructure.Migrations
                 {
                     RequestId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Description = table.Column<string>(type: "text", nullable: false),
+                    ItemId = table.Column<int>(type: "integer", nullable: false),
+                    CreatorId = table.Column<int>(type: "integer", nullable: false),
+                    RepairmanId = table.Column<int>(type: "integer", nullable: true),
+                    EstimatedEndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    ReportNote = table.Column<string>(type: "text", nullable: false),
                     Status = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ItemId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedById = table.Column<int>(type: "integer", nullable: false)
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    InventoryObjectItemId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RepairRequests", x => x.RequestId);
                     table.ForeignKey(
-                        name: "FK_RepairRequests_InventoryObjects_ItemId",
-                        column: x => x.ItemId,
+                        name: "FK_RepairRequests_InventoryObjects_InventoryObjectItemId",
+                        column: x => x.InventoryObjectItemId,
                         principalTable: "InventoryObjects",
-                        principalColumn: "ItemId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ItemId");
                     table.ForeignKey(
-                        name: "FK_RepairRequests_Users_CreatedById",
-                        column: x => x.CreatedById,
+                        name: "FK_RepairRequests_Users_CreatorId",
+                        column: x => x.CreatorId,
                         principalTable: "Users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
@@ -231,14 +214,14 @@ namespace Infrastructure.Migrations
                 column: "RenterId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RepairRequests_CreatedById",
+                name: "IX_RepairRequests_CreatorId",
                 table: "RepairRequests",
-                column: "CreatedById");
+                column: "CreatorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RepairRequests_ItemId",
+                name: "IX_RepairRequests_InventoryObjectItemId",
                 table: "RepairRequests",
-                column: "ItemId");
+                column: "InventoryObjectItemId");
         }
 
         /// <inheritdoc />
@@ -252,9 +235,6 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "LogEntries");
-
-            migrationBuilder.DropTable(
-                name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Rentals");
