@@ -1,26 +1,21 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-
 using API;
 using API.Middleware;
-
 using Application.Interfaces;
 using Application.MappingProfiles;
-
 using Infrastructure.Helpers;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Infrastructure.Factories;
-
 using Domain.Interfaces;
-
 using Application.Services;
 using Domain.Services;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// CORS Policy
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowNextJS", policy =>
@@ -31,26 +26,37 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Database
+// Database configuration
 var connectionString = DbContextConfigurationHelper.BuildConnectionString();
 builder.Services.AddDbContext<AppDbContext>(options =>
-    DbContextConfigurationHelper.Configure((DbContextOptionsBuilder<AppDbContext>)options, connectionString), ServiceLifetime.Scoped);
+    DbContextConfigurationHelper.Configure((DbContextOptionsBuilder<AppDbContext>)options, connectionString),
+    ServiceLifetime.Scoped);
+
+// Optional: DbContext Factory and Scope Factory registrations
 builder.Services.AddScoped<DbContextFactory>();
-builder.Services.AddSingleton<IServiceScopeFactory>(provider => provider.GetRequiredService<IServiceProvider>().CreateScope().ServiceProvider.GetRequiredService<IServiceScopeFactory>());
+builder.Services.AddSingleton<IServiceScopeFactory>(provider =>
+    provider.GetRequiredService<IServiceProvider>()
+           .CreateScope()
+           .ServiceProvider
+           .GetRequiredService<IServiceScopeFactory>());
 
-// **Repositories**
-builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();  // Inventory Repository
+// Repositories
+builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
+builder.Services.AddScoped<IRepairRepository, RepairRepository>();
 
-// **Application Services**
-builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IOrderDomainService, OrderDomainService>();
-builder.Services.AddScoped<IInventoryService, InventoryService>();  // Inventory Service
+// Domain Services (Business logic layer)
+builder.Services.AddScoped<IInventoryDomainService, InventoryDomainService>();
+builder.Services.AddScoped<IRepairDomainService, RepairDomainService>();
 
-// **AutoMapper Profiles**
-builder.Services.AddAutoMapper(typeof(OrderProfile));
-builder.Services.AddAutoMapper(typeof(InventoryProfile));  // Inventory Mapping Profile
+// Application Services (Orchestration & mapping)
+builder.Services.AddScoped<IInventoryService, InventoryService>();
+builder.Services.AddScoped<IRepairService, RepairService>();
 
+// AutoMapper Profiles
+builder.Services.AddAutoMapper(typeof(InventoryProfile));
+builder.Services.AddAutoMapper(typeof(RepairProfile));
+
+// Controllers, Endpoints and Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -58,30 +64,20 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 });
 
-
 var app = builder.Build();
 
-// HTTP pipeline
-if (app.Environment.IsDevelopment())
+// HTTP Pipeline
+app.UseDeveloperExceptionPage();
+app.UseStaticFiles();
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "NAP API v1"));
-}
-else
-{
-    app.UseExceptionHandler("/Error");
-    //app.UseHsts()
-}
-
-// const string AllowAnyOriginPolicy = "_allowAnyOrigin";
-// app.UseCors(AllowAnyOriginPolicy);
-
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API v1");
+});
 app.UseMiddleware<ExceptionHandler>();
-//app.UseHttpsRedirection();
+
 app.UseRouting();
 app.UseCors("AllowNextJS");
-
 app.UseAuthorization();
 app.MapControllers();
 

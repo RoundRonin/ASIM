@@ -2,14 +2,13 @@
 
 public class RepairRequest
 {
-    public int RequestId { get; init; }
-    public string Description { get; init; }
-    public string Status {  get; init; }
-    public DateTime CreatedDate { get; init; }
-    public DateTime UpdatedDate { get; init; }
-    
-    public Guid ItemId { get; init; }
-    public InventoryObject InventoryObject { get; init; }
-    public int CreatedById { get; init; }
-    public User CreatedBy { get; init; }
+    public int RequestId { get; set; }
+    public int ItemId { get; set; } 
+    public int CreatorId { get; set; }
+    public int? RepairmanId { get; set; }
+    public DateTime? EstimatedEndDate { get; set; }
+    public string ReportNote { get; set; } = string.Empty;
+    public string Status { get; set; } = "open";
+    public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+    public DateTime? UpdatedDate { get; set; }
 }
