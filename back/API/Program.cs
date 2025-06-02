@@ -71,7 +71,7 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Error");
-    //app.UseHsts();
+    //app.UseHsts()
 }
 
 // const string AllowAnyOriginPolicy = "_allowAnyOrigin";

@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AutoMigration_ : Migration
+    public partial class AutoMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,17 +16,17 @@ namespace Infrastructure.Migrations
                 name: "InventoryObjects",
                 columns: table => new
                 {
-                    ObjectId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ItemId = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     SerialNumber = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Location = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Condition = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    QrCode = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                    QrCode = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    ItemTypeId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_InventoryObjects", x => x.ObjectId);
+                    table.PrimaryKey("PK_InventoryObjects", x => x.ItemId);
                 });
 
             migrationBuilder.CreateTable(
@@ -71,7 +71,7 @@ namespace Infrastructure.Migrations
                 {
                     DetailsId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ObjectId = table.Column<int>(type: "integer", nullable: false),
+                    ItemId = table.Column<Guid>(type: "uuid", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     Model = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Manufacturer = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
@@ -83,10 +83,10 @@ namespace Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_AdditionalObjectDetails", x => x.DetailsId);
                     table.ForeignKey(
-                        name: "FK_AdditionalObjectDetails_InventoryObjects_ObjectId",
-                        column: x => x.ObjectId,
+                        name: "FK_AdditionalObjectDetails_InventoryObjects_ItemId",
+                        column: x => x.ItemId,
                         principalTable: "InventoryObjects",
-                        principalColumn: "ObjectId",
+                        principalColumn: "ItemId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -121,16 +121,16 @@ namespace Infrastructure.Migrations
                     Timestamp = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     UserId = table.Column<int>(type: "integer", nullable: false),
-                    ObjectId = table.Column<int>(type: "integer", nullable: false)
+                    ItemId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_LogEntries", x => x.LogId);
                     table.ForeignKey(
-                        name: "FK_LogEntries_InventoryObjects_ObjectId",
-                        column: x => x.ObjectId,
+                        name: "FK_LogEntries_InventoryObjects_ItemId",
+                        column: x => x.ItemId,
                         principalTable: "InventoryObjects",
-                        principalColumn: "ObjectId",
+                        principalColumn: "ItemId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_LogEntries_Users_UserId",
@@ -149,17 +149,17 @@ namespace Infrastructure.Migrations
                     StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Status = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    ObjectId = table.Column<int>(type: "integer", nullable: false),
+                    ItemId = table.Column<Guid>(type: "uuid", nullable: false),
                     RenterId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Rentals", x => x.RentalId);
                     table.ForeignKey(
-                        name: "FK_Rentals_InventoryObjects_ObjectId",
-                        column: x => x.ObjectId,
+                        name: "FK_Rentals_InventoryObjects_ItemId",
+                        column: x => x.ItemId,
                         principalTable: "InventoryObjects",
-                        principalColumn: "ObjectId",
+                        principalColumn: "ItemId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Rentals_Users_RenterId",
@@ -179,17 +179,17 @@ namespace Infrastructure.Migrations
                     Status = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ObjectId = table.Column<int>(type: "integer", nullable: false),
+                    ItemId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedById = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RepairRequests", x => x.RequestId);
                     table.ForeignKey(
-                        name: "FK_RepairRequests_InventoryObjects_ObjectId",
-                        column: x => x.ObjectId,
+                        name: "FK_RepairRequests_InventoryObjects_ItemId",
+                        column: x => x.ItemId,
                         principalTable: "InventoryObjects",
-                        principalColumn: "ObjectId",
+                        principalColumn: "ItemId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RepairRequests_Users_CreatedById",
@@ -200,9 +200,9 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AdditionalObjectDetails_ObjectId",
+                name: "IX_AdditionalObjectDetails_ItemId",
                 table: "AdditionalObjectDetails",
-                column: "ObjectId",
+                column: "ItemId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -211,9 +211,9 @@ namespace Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LogEntries_ObjectId",
+                name: "IX_LogEntries_ItemId",
                 table: "LogEntries",
-                column: "ObjectId");
+                column: "ItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LogEntries_UserId",
@@ -221,9 +221,9 @@ namespace Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Rentals_ObjectId",
+                name: "IX_Rentals_ItemId",
                 table: "Rentals",
-                column: "ObjectId");
+                column: "ItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Rentals_RenterId",
@@ -236,9 +236,9 @@ namespace Infrastructure.Migrations
                 column: "CreatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RepairRequests_ObjectId",
+                name: "IX_RepairRequests_ItemId",
                 table: "RepairRequests",
-                column: "ObjectId");
+                column: "ItemId");
         }
 
         /// <inheritdoc />
