@@ -1,1 +1,1 @@
-dotnet ef migrations add AutoMigration_$TIMESTAMP --project ..\Infrastructure\ --startup-project ..\API\
+dotnet ef migrations add AutoMigration --project ..\Infrastructure\ --startup-project ..\API\
