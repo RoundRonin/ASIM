@@ -6,7 +6,7 @@ namespace Infrastructure.Data;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    public DbSet<Order> Orders { get; set; } // пример
+    public DbSet<Order> Orders { get; set; } // пїЅпїЅпїЅпїЅпїЅпїЅ
 
     public DbSet<User> Users { get; set; }
     public DbSet<BlacklistEntry> BlacklistEntries { get; set; }
@@ -62,7 +62,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
             entity.HasOne(r => r.InventoryObject)
                   .WithMany(o => o.Rentals)
-                  .HasForeignKey(r => r.ObjectId);
+                  .HasForeignKey(r => r.ItemId);
         });
 
         modelBuilder.Entity<RepairRequest>(entity =>
@@ -77,12 +77,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
             entity.HasOne(r => r.InventoryObject)
                   .WithMany(o => o.RepairRequests)
-                  .HasForeignKey(r => r.ObjectId);
+                  .HasForeignKey(r => r.ItemId);
         });
 
         modelBuilder.Entity<InventoryObject>(entity =>
         {
-            entity.HasKey(o => o.ObjectId);
+            entity.HasKey(o => o.ItemId);
             entity.Property(o => o.Name).HasMaxLength(100);
             entity.Property(o => o.SerialNumber).HasMaxLength(100);
             entity.Property(o => o.Location).HasMaxLength(100);
@@ -91,7 +91,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
             entity.HasOne(o => o.AdditionalDetails)
                   .WithOne(d => d.InventoryObject)
-                  .HasForeignKey<AdditionalObjectDetails>(d => d.ObjectId);
+                  .HasForeignKey<AdditionalObjectDetails>(d => d.ItemId);
         });
 
         modelBuilder.Entity<LogEntry>(entity =>
@@ -107,7 +107,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
             entity.HasOne(l => l.InventoryObject)
                   .WithMany(o => o.LogEntries)
-                  .HasForeignKey(l => l.ObjectId);
+                  .HasForeignKey(l => l.ItemId);
         });
 
         modelBuilder.Entity<AdditionalObjectDetails>(entity =>

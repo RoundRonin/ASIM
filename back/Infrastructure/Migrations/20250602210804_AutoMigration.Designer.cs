@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250602195929_AutoMigration")]
+    [Migration("20250602210804_AutoMigration")]
     partial class AutoMigration
     {
         /// <inheritdoc />
@@ -37,6 +37,9 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Manufacturer")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -46,9 +49,6 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
-
-                    b.Property<int>("ObjectId")
-                        .HasColumnType("integer");
 
                     b.Property<DateTime>("PurchaseDate")
                         .HasColumnType("date");
@@ -64,7 +64,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("DetailsId");
 
-                    b.HasIndex("ObjectId")
+                    b.HasIndex("ItemId")
                         .IsUnique();
 
                     b.ToTable("AdditionalObjectDetails");
@@ -98,16 +98,17 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.InventoryObject", b =>
                 {
-                    b.Property<int>("ObjectId")
+                    b.Property<Guid>("ItemId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ObjectId"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Condition")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
+
+                    b.Property<int?>("ItemTypeId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -129,7 +130,7 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.HasKey("ObjectId");
+                    b.HasKey("ItemId");
 
                     b.ToTable("InventoryObjects");
                 });
@@ -151,8 +152,8 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("ObjectId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("timestamp with time zone");
@@ -162,7 +163,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("LogId");
 
-                    b.HasIndex("ObjectId");
+                    b.HasIndex("ItemId");
 
                     b.HasIndex("UserId");
 
@@ -225,8 +226,8 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("ObjectId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("RenterId")
                         .HasColumnType("integer");
@@ -241,7 +242,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("RentalId");
 
-                    b.HasIndex("ObjectId");
+                    b.HasIndex("ItemId");
 
                     b.HasIndex("RenterId");
 
@@ -266,8 +267,8 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("ObjectId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -281,7 +282,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("CreatedById");
 
-                    b.HasIndex("ObjectId");
+                    b.HasIndex("ItemId");
 
                     b.ToTable("RepairRequests");
                 });
@@ -326,7 +327,7 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.InventoryObject", "InventoryObject")
                         .WithOne("AdditionalDetails")
-                        .HasForeignKey("Domain.Entities.AdditionalObjectDetails", "ObjectId")
+                        .HasForeignKey("Domain.Entities.AdditionalObjectDetails", "ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -348,7 +349,7 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.InventoryObject", "InventoryObject")
                         .WithMany("LogEntries")
-                        .HasForeignKey("ObjectId")
+                        .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -367,7 +368,7 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.InventoryObject", "InventoryObject")
                         .WithMany("Rentals")
-                        .HasForeignKey("ObjectId")
+                        .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -392,7 +393,7 @@ namespace Infrastructure.Migrations
 
                     b.HasOne("Domain.Entities.InventoryObject", "InventoryObject")
                         .WithMany("RepairRequests")
-                        .HasForeignKey("ObjectId")
+                        .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

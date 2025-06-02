@@ -7,7 +7,7 @@ public class Rental
     public DateTime EndDate { get; init; }
     public string Status { get; init; }
 
-    public int ObjectId { get; init; }
+    public Guid ItemId { get; init; }
     public InventoryObject InventoryObject { get; init; }
 
     public int RenterId { get; init; }

@@ -38,14 +38,19 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<DbContextFactory>();
 builder.Services.AddSingleton<IServiceScopeFactory>(provider => provider.GetRequiredService<IServiceProvider>().CreateScope().ServiceProvider.GetRequiredService<IServiceScopeFactory>());
 
-// Repos
+// **Repositories**
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();  // Inventory Repository
 
-// Services
+// **Application Services**
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderDomainService, OrderDomainService>();
+builder.Services.AddScoped<IInventoryService, InventoryService>();  // Inventory Service
 
+// **AutoMapper Profiles**
 builder.Services.AddAutoMapper(typeof(OrderProfile));
+builder.Services.AddAutoMapper(typeof(InventoryProfile));  // Inventory Mapping Profile
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -66,7 +71,7 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Error");
-    //app.UseHsts();
+    //app.UseHsts()
 }
 
 // const string AllowAnyOriginPolicy = "_allowAnyOrigin";
@@ -80,6 +85,4 @@ app.UseCors("AllowNextJS");
 app.UseAuthorization();
 app.MapControllers();
 
-
 app.Run();
-

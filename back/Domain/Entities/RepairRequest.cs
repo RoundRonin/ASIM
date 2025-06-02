@@ -7,7 +7,8 @@ public class RepairRequest
     public string Status {  get; init; }
     public DateTime CreatedDate { get; init; }
     public DateTime UpdatedDate { get; init; }
-    public int ObjectId { get; init; }
+    
+    public Guid ItemId { get; init; }
     public InventoryObject InventoryObject { get; init; }
     public int CreatedById { get; init; }
     public User CreatedBy { get; init; }
