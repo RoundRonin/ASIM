@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Domain.Entities;
 
-namespace Domain.Entities
+public class RepairRequest
 {
-    public class RepairRequest
-    {
-        public int RequestId { get; set; }
-        public string Description { get; set; }
-        public string Status {  get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime UpdatedDate { get; set; }
-        public int ObjectId { get; set; }
-        public InventoryObject InventoryObject { get; set; }
-        public int CreatedById { get; set; }
-        public User CreatedBy { get; set; }
-    }
+    public int RequestId { get; init; }
+    public string Description { get; init; }
+    public string Status {  get; init; }
+    public DateTime CreatedDate { get; init; }
+    public DateTime UpdatedDate { get; init; }
+    public int ObjectId { get; init; }
+    public InventoryObject InventoryObject { get; init; }
+    public int CreatedById { get; init; }
+    public User CreatedBy { get; init; }
 }

@@ -15,7 +15,7 @@ public class OrderDomainService(IOrderRepository orderRepository) : IOrderDomain
             throw new DomainValidationException(errors);
         }
 
-        order.OrderNumber = Guid.NewGuid().ToString();
+        // order.OrderNumber = Guid.NewGuid().ToString();
 
         var newOrder = await orderRepository.AddAsync(order);
         return newOrder;

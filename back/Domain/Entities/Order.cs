@@ -1,18 +1,17 @@
-using System;
-using System.Collections.Generic;
-
 namespace Domain.Entities;
+
+// TODO remove (sample entity) 
 
 public class Order
 {
-    public int Id { get; set; }
-    public string SenderCity { get; set; } = string.Empty;
-    public string SenderAddress { get; set; } = string.Empty;
-    public string ReceiverCity { get; set; } = string.Empty;
-    public string ReceiverAddress { get; set; } = string.Empty;
-    public double CargoWeight { get; set; }
-    public DateTime PickupDate { get; set; }
-    public string OrderNumber { get; set; } = string.Empty;
+    public int Id { get; init; }
+    public string SenderCity { get; init; } = string.Empty;
+    public string SenderAddress { get; init; } = string.Empty;
+    public string ReceiverCity { get; init; } = string.Empty;
+    public string ReceiverAddress { get; init; } = string.Empty;
+    public double CargoWeight { get; init; }
+    public DateTime PickupDate { get; init; }
+    public string OrderNumber { get; init; } = string.Empty;
 
 
     public bool IsValid(out List<string> errors)

@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Domain.Entities;
 
-namespace Domain.Entities
+public class Rental
 {
-    public class Rental
-    {
-        public int RentalId { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public string Status { get; set; }
+    public int RentalId { get; init; }
+    public DateTime StartDate { get; init; }
+    public DateTime EndDate { get; init; }
+    public string Status { get; init; }
 
-        public int ObjectId { get; set; }
-        public InventoryObject InventoryObject { get; set; }
+    public int ObjectId { get; init; }
+    public InventoryObject InventoryObject { get; init; }
 
-        public int RenterId { get; set; }
-        public User Renter { get; set; }
-    }
+    public int RenterId { get; init; }
+    public User Renter { get; init; }
 }

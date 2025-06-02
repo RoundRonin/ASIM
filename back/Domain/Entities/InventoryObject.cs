@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Domain.Entities;
 
-namespace Domain.Entities
+public class InventoryObject
 {
-    public class InventoryObject
-    {
-        public int ObjectId { get; set; }
-        public string Name { get; set; }
-        public string SerialNumber { get; set; }
-        public string Location { get; set; }
-        public string Condition { get; set; }
-        public string QrCode { get; set; }
+    public int ObjectId { get; init; }
+    public string Name { get; init; }
+    public string SerialNumber { get; init; }
+    public string Location { get; init; }
+    public string Condition { get; init; }
+    public string QrCode { get; init; }
 
-        public ICollection<Rental> Rentals { get; set; } = new List<Rental>();
-        public ICollection<RepairRequest> RepairRequests { get; set; } = new List<RepairRequest>();
-        public ICollection<LogEntry> LogEntries { get; set; } = new List<LogEntry>();
-        public AdditionalObjectDetails AdditionalDetails { get; set; }
-    }
+    public ICollection<Rental> Rentals { get; init; } = new List<Rental>();
+    public ICollection<RepairRequest> RepairRequests { get; init; } = new List<RepairRequest>();
+    public ICollection<LogEntry> LogEntries { get; init; } = new List<LogEntry>();
+    public AdditionalObjectDetails AdditionalDetails { get; init; }
 }

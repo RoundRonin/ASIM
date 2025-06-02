@@ -1,24 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Domain.Entities;
 
-namespace Domain.Entities
+public class AdditionalObjectDetails
 {
-    public class AdditionalObjectDetails
-    {
-        public int DetailsId { get; set; }
-        public int ObjectId { get; set; }
+    public int DetailsId { get; init; }
+    public int ObjectId { get; init; }  // FK to InventoryObject
 
-        public string Description { get; set; }
-        public string Model { get; set; }
-        public string Manufacturer { get; set; }
-        public DateTime PurchaseDate { get; set; }
-        public string Warranty { get; set; }
-        public string TechnicalSpecifications { get; set; }
+    public string Description { get; init; }
+    public string Model { get; init; }
+    public string Manufacturer { get; init; }
+    public DateTime PurchaseDate { get; init; }
+    public string Warranty { get; init; }
+    public string TechnicalSpecifications { get; init; }
 
-        public InventoryObject InventoryObject { get; set; }
-    }
-
+    public InventoryObject InventoryObject { get; init; }  // Navigation property
 }
