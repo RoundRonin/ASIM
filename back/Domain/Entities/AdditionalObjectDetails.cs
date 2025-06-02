@@ -3,7 +3,7 @@
 public class AdditionalObjectDetails
 {
     public int DetailsId { get; init; }
-    public int ObjectId { get; init; }  // FK to InventoryObject
+    public Guid ItemId  { get; init; }  // FK to InventoryObject
 
     public string Description { get; init; }
     public string Model { get; init; }

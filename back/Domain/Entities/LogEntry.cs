@@ -10,6 +10,6 @@ public class LogEntry
     public int UserId { get; init; }
     public User User { get; init; }
 
-    public int ObjectId { get; init; }
+    public Guid ItemId { get; init; }
     public InventoryObject InventoryObject { get; init; }
 }
