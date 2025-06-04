@@ -1,17 +1,19 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using API;
 using API.Middleware;
 using Application.Interfaces;
 using Application.MappingProfiles;
-using Infrastructure.Helpers;
-using Infrastructure.Data;
-using Infrastructure.Repositories;
-using Infrastructure.Factories;
-using Domain.Interfaces;
 using Application.Services;
+using Domain.Interfaces;
 using Domain.Services;
+using Infrastructure.Data;
+using Infrastructure.Factories;
+using Infrastructure.Helpers;
+using Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using System.ComponentModel.Design;
 using System.Diagnostics;
+using IDictionaryService = Application.Interfaces.IDictionaryService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +27,9 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
+
+
+
 
 // Database configuration
 var connectionString = DbContextConfigurationHelper.BuildConnectionString();
@@ -51,6 +56,12 @@ builder.Services.AddScoped<IRepairDomainService, RepairDomainService>();
 // Application Services (Orchestration & mapping)
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IRepairService, RepairService>();
+
+// For dictionary?
+
+builder.Services.AddScoped<IDictionaryRepository, DictionaryRepository>();
+builder.Services.AddScoped<IDictionaryService, DictionaryService>();
+
 
 // AutoMapper Profiles
 builder.Services.AddAutoMapper(typeof(InventoryProfile));
