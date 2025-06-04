@@ -29,6 +29,9 @@ builder.Services.AddCors(options =>
 });
 
 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserDomainService, UserDomainService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 
 // Database configuration
