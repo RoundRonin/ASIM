@@ -1,16 +1,17 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using API;
 using API.Middleware;
 using Application.Interfaces;
 using Application.MappingProfiles;
-using Infrastructure.Helpers;
-using Infrastructure.Data;
-using Infrastructure.Repositories;
-using Infrastructure.Factories;
-using Domain.Interfaces;
 using Application.Services;
+using Domain.Interfaces;
 using Domain.Services;
+using Infrastructure.Data;
+using Infrastructure.Factories;
+using Infrastructure.Helpers;
+using Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +26,13 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
+
+
+//For user?
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+
 
 // Database configuration
 var connectionString = DbContextConfigurationHelper.BuildConnectionString();
