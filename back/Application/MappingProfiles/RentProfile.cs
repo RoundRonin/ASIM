@@ -4,11 +4,13 @@ using Domain.Entities;
 
 namespace Application.MappingProfiles;
 
-public class RentProfile : Profile
+public class RentalProfile : Profile
 {
-    public RentProfile()
+    public RentalProfile()
     {
-        CreateMap<CreateRentDTO, Rental>();
+        CreateMap<CreateRentDTO, Rental>()
+            .ForMember(dest => dest.RenterId, opt => opt.MapFrom(src => src.UserId));
+        
         CreateMap<Rental, RentDTO>();
     }
 }

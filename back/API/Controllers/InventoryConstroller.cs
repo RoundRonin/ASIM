@@ -6,36 +6,26 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("storage/inventory")]
-    public class InventoryController : ControllerBase
+    public class InventoryController(IInventoryService inventoryService) : ControllerBase
     {
-        private readonly IInventoryService _inventoryService;
-        
-        public InventoryController(IInventoryService inventoryService)
-        {
-            _inventoryService = inventoryService;
-        }
-        
-        // GET /storage/inventory/item/{itemId}/itemInfo
         [HttpGet("item/{itemId:guid}/itemInfo", Name = "GetItemInfoById")]
         public async Task<IActionResult> GetItemInfoById(Guid itemId)
         {
-            var itemInfo = await _inventoryService.GetItemInfoByIdAsync(itemId);
-            if (itemInfo == null)
+            var itemInfo = await inventoryService.GetItemInfoByIdAsync(itemId);
+            if (itemInfo is null)
             {
                 return NotFound();
             }
             return Ok(new { itemid = itemInfo.ItemId, details = itemInfo.Details });
         }
         
-        // GET /storage/inventory?itemTypeId=...
         [HttpGet(Name = "GetItemsByType")]
         public async Task<IActionResult> GetItemsByType([FromQuery] int? itemTypeId)
         {
-            var items = await _inventoryService.GetItemsByTypeAsync(itemTypeId);
+            var items = await inventoryService.GetItemsByTypeAsync(itemTypeId);
             return Ok(items);
         }
         
-        // POST /storage/inventory/item
         [HttpPost("item", Name = "AddNewItem")]
         public async Task<IActionResult> AddNewItem([FromBody] CreateInventoryItemDTO createInventoryItemDTO)
         {
@@ -43,16 +33,15 @@ namespace API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var addedItem = await _inventoryService.AddNewItemAsync(createInventoryItemDTO);
+            var addedItem = await inventoryService.AddNewItemAsync(createInventoryItemDTO);
             return Ok(new { itemid = addedItem.ItemId });
         }
         
-        // GET /storage/inventory/item/{itemId}
         [HttpGet("item/{itemId:guid}", Name = "GetItemById")]
         public async Task<IActionResult> GetItemById(Guid itemId)
         {
-            var item = await _inventoryService.GetItemByIdAsync(itemId);
-            if (item == null)
+            var item = await inventoryService.GetItemByIdAsync(itemId);
+            if (item is null)
             {
                 return NotFound();
             }
@@ -63,7 +52,7 @@ namespace API.Controllers
         [HttpDelete("item/{itemId:guid}", Name = "DeleteItem")]
         public async Task<IActionResult> DeleteItem(Guid itemId)
         {
-            await _inventoryService.DeleteItemAsync(itemId);
+            await inventoryService.DeleteItemAsync(itemId);
             return NoContent();
         }
     }

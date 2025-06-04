@@ -33,6 +33,9 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserDomainService, UserDomainService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
+builder.Services.AddScoped<IRentRepository, RentRepository>();
+builder.Services.AddScoped<IRentDomainService, RentDomainService>();
+builder.Services.AddScoped<IRentService, RentService>();
 
 // Database configuration
 var connectionString = DbContextConfigurationHelper.BuildConnectionString();
@@ -69,6 +72,9 @@ builder.Services.AddScoped<IDictionaryService, DictionaryService>();
 // AutoMapper Profiles
 builder.Services.AddAutoMapper(typeof(InventoryProfile));
 builder.Services.AddAutoMapper(typeof(RepairProfile));
+builder.Services.AddAutoMapper(typeof(DictionaryProfile));
+builder.Services.AddAutoMapper(typeof(UserProfile));
+builder.Services.AddAutoMapper(typeof(RentalProfile));
 
 // Controllers, Endpoints and Swagger
 builder.Services.AddControllers();

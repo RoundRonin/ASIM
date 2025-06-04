@@ -7,7 +7,6 @@ namespace API.Controllers;
 [ApiController]
 public class RepairController(IRepairService repairService) : ControllerBase
 {
-    // GET /repairs?repairStatusId=...
     [HttpGet("repairs", Name = "GetAllRepairs")]
     public async Task<IActionResult> GetAllRepairs([FromQuery] int? repairStatusId)
     {
@@ -15,7 +14,6 @@ public class RepairController(IRepairService repairService) : ControllerBase
         return Ok(repairs);
     }
         
-    // GET /repair/{repairId}
     [HttpGet("repair/{repairId:int}", Name = "GetRepair")]
     public async Task<IActionResult> GetRepair(int repairId)
     {
@@ -23,7 +21,6 @@ public class RepairController(IRepairService repairService) : ControllerBase
         return Ok(repair);
     }
         
-    // POST /repair
     [HttpPost("repair", Name = "NewRepairCreate")]
     public async Task<IActionResult> NewRepairCreate([FromBody] CreateRepairDTO createRepairDTO)
     {
@@ -32,7 +29,6 @@ public class RepairController(IRepairService repairService) : ControllerBase
             new { repairId = repair.RepairId, estimatedEndDate = repair.EstimatedEndDate });
     }
         
-    // POST /repair/{repairId}/repairAccept
     [HttpPost("repair/{repairId:int}/repairAccept", Name = "AcceptRepair")]
     public async Task<IActionResult> AcceptRepair(int repairId, [FromBody] AcceptRepairDTO acceptRepairDTO)
     {
@@ -40,7 +36,6 @@ public class RepairController(IRepairService repairService) : ControllerBase
         return Ok(repair);
     }
         
-    // POST /repair/{repairId}/repairClose
     [HttpPost("repair/{repairId:int}/repairClose", Name = "CloseRepair")]
     public async Task<IActionResult> CloseRepair(int repairId, [FromBody] CloseRepairDTO closeRepairDTO)
     {
