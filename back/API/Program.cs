@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using IDictionaryService = Application.Interfaces.IDictionaryService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,12 +29,9 @@ builder.Services.AddCors(options =>
 });
 
 
-//For user?
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserDomainService, UserDomainService>();
 builder.Services.AddScoped<IUserService, UserService>();
-
-
 
 
 // Database configuration
@@ -61,6 +59,12 @@ builder.Services.AddScoped<IRepairDomainService, RepairDomainService>();
 // Application Services (Orchestration & mapping)
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IRepairService, RepairService>();
+
+// Dictionary-related services: These services handle operations related to dictionary data,
+// such as retrieving and managing key-value pairs or other dictionary-like structures.
+builder.Services.AddScoped<IDictionaryRepository, DictionaryRepository>();
+builder.Services.AddScoped<IDictionaryService, DictionaryService>();
+
 
 // AutoMapper Profiles
 builder.Services.AddAutoMapper(typeof(InventoryProfile));
