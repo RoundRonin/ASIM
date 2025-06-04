@@ -30,7 +30,9 @@ builder.Services.AddCors(options =>
 
 //For user?
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserDomainService, UserDomainService>();
 builder.Services.AddScoped<IUserService, UserService>();
+
 
 
 

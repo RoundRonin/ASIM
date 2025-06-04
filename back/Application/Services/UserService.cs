@@ -1,37 +1,35 @@
 ﻿using Application.DTOs;
 using Application.Interfaces;
 using AutoMapper;
-using Domain.Entities;
 using Domain.Interfaces;
 
 namespace Application.Services;
 
-public class UserService(IUserRepository userRepository, IMapper mapper) : IUserService
+public class UserService(IUserDomainService domain, IMapper mapper) : IUserService
 {
     public async Task<string> LoginAsync(string username, string password)
     {
-        var user = await userRepository.GetByUsernameAsync(username);
-        if (user == null || user.PasswordHash != password) // In real apps, hash+salt!
-            throw new UnauthorizedAccessException("Invalid credentials.");
-
-        return "token_xyz"; // In real apps, return JWT
+        return await domain.LoginAsync(username, password);
     }
 
-    public Task LogoutAsync() => Task.CompletedTask;
+    public async Task LogoutAsync()
+    {
+        await domain.LogoutAsync();
+    }
 
     public async Task<UserDTO> GetUserByUsernameAsync(string username)
     {
-        var user = await userRepository.GetByUsernameAsync(username);
-        return user != null ? mapper.Map<UserDTO>(user) : throw new Exception("User not found");
+        var user = await domain.GetUserByUsernameAsync(username);
+        return mapper.Map<UserDTO>(user);
     }
 
     public async Task<int> AddToBlacklistAsync(string username)
     {
-        return await userRepository.AddToBlacklistAsync(username);
+        return await domain.AddToBlacklistAsync(username);
     }
 
     public async Task RemoveFromBlacklistAsync(string username)
     {
-        await userRepository.RemoveFromBlacklistAsync(username);
+        await domain.RemoveFromBlacklistAsync(username);
     }
 }
