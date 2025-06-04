@@ -57,8 +57,8 @@ builder.Services.AddScoped<IRepairDomainService, RepairDomainService>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IRepairService, RepairService>();
 
-// For dictionary?
-
+// Dictionary-related services: These services handle operations related to dictionary data,
+// such as retrieving and managing key-value pairs or other dictionary-like structures.
 builder.Services.AddScoped<IDictionaryRepository, DictionaryRepository>();
 builder.Services.AddScoped<IDictionaryService, DictionaryService>();
 
