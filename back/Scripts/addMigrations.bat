@@ -1,0 +1,1 @@
+dotnet ef migrations add AutoMigration --project ..\Infrastructure\ --startup-project ..\API\

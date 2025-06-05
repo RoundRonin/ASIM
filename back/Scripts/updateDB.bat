@@ -1,0 +1,1 @@
+ dotnet ef database update --project ..\Infrastructure\ --startup-project ..\API\
